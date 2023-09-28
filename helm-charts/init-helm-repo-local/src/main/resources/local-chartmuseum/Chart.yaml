@@ -1,0 +1,10 @@
+apiVersion: v2
+name: local-chartmuseum
+description: A Helm chart for ChartMuseum deployment in local
+type: application
+version: ${helm.chart.chartmuseum.version}
+appVersion: ${project.version}
+dependencies:
+  - name: chartmuseum
+    repository: ${helm.chart.chartmuseum.url}
+    version: ${helm.chart.chartmuseum.version}

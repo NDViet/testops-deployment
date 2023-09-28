@@ -1,0 +1,9 @@
+persistence:
+  pv:
+    accessMode: ReadWriteOnce
+    capacity:
+      storage: 8Gi
+    enabled: true
+    hostPath:
+      path: "/local/testops/"
+    storageClass: "-"

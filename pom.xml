@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.ndviet</groupId>
+    <artifactId>testops-deployment</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>helm-charts</module>
+    </modules>
+
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+        <helm.chart.chartmuseum.name>chartmuseum</helm.chart.chartmuseum.name>
+        <helm.chart.chartmuseum.url>https://chartmuseum.github.io/charts</helm.chart.chartmuseum.url>
+        <helm.chart.chartmuseum.version>3.10.1</helm.chart.chartmuseum.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.kokuwa.maven</groupId>
+                    <artifactId>helm-maven-plugin</artifactId>
+                    <version>6.11.0</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <chartDirectory>${project.build.directory}/classes</chartDirectory>
+                        <chartVersion>${project.version}</chartVersion>
+                        <useLocalHelmBinary>true</useLocalHelmBinary>
+                        <autoDetectLocalHelmBinary>true</autoDetectLocalHelmBinary>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>templating-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                    <extensions>true</extensions>
+                    <executions>
+                        <execution>
+                            <id>chart-src-template</id>
+                            <goals>
+                                <goal>filter-sources</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirectory>${basedir}/src/main/resources</sourceDirectory>
+                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

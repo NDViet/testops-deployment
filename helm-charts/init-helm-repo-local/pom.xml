@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ndviet</groupId>
+        <artifactId>helm-charts</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>init-helm-repo-local</artifactId>
+
+    <properties>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>io.kokuwa.maven</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>helm-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>init</goal>
+                            <goal>dependency-build</goal>
+                            <goal>package</goal>
+                            <goal>upgrade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <releaseName>local-helm-repo</releaseName>
+                    <installForce>true</installForce>
+                    <upgradeForce>true</upgradeForce>
+                    <skipUpgrade>false</skipUpgrade>
+                    <skipInstall>false</skipInstall>
+                    <helmExtraRepos>
+                        <helmExtraRepo>
+                            <name>${helm.chart.chartmuseum.name}</name>
+                            <url>${helm.chart.chartmuseum.url}</url>
+                        </helmExtraRepo>
+                    </helmExtraRepos>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <sleep seconds="20"/>
+                    </tasks>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wait-for-repo-get-ready</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,9 @@
+chartmuseum:
+  env:
+    open:
+      ENABLE_METRICS: false
+      DISABLE_API: false
+      ALLOW_OVERWRITE: true
+  service:
+    type: NodePort
+    nodePort: 30789

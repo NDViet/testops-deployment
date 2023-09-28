@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.ndviet</groupId>
+        <artifactId>helm-charts</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>helm-charts-individual</artifactId>
+
+    <properties>
+        <helm.repo.name>chart-repo</helm.repo.name>
+        <helm.repo.baseUrl.artifactory>http://testops.ndviet.org/helm-repo</helm.repo.baseUrl.artifactory>
+        <helm.repo.baseUrl.local>http://localhost:30789</helm.repo.baseUrl.local>
+        <helm.repo.url.artifactory>${helm.repo.baseUrl.artifactory}/api/charts</helm.repo.url.artifactory>
+        <helm.repo.url.local>${helm.repo.baseUrl.local}/api/charts</helm.repo.url.local>
+        <helm.repo.type.artifactory>CHARTMUSEUM</helm.repo.type.artifactory>
+        <helm.repo.type.local>CHARTMUSEUM</helm.repo.type.local>
+        <helm.repo.username.artifactory>adminuser</helm.repo.username.artifactory>
+        <helm.repo.password.artifactory>password</helm.repo.password.artifactory>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.kokuwa.maven</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>helm-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>dependency-build</goal>
+                            <goal>lint</goal>
+                            <goal>package</goal>
+                            <goal>upload</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <chartVersion>${project.version}</chartVersion>
+                    <useLocalHelmBinary>true</useLocalHelmBinary>
+                    <autoDetectLocalHelmBinary>true</autoDetectLocalHelmBinary>
+                    <uploadRepoStable>
+                        <name>${helm.repo.name}</name>
+                        <url>${helm.repo.url.artifactory}</url>
+                        <type>${helm.repo.type.artifactory}</type>
+                        <username>${helm.repo.username.artifactory}</username>
+                        <password>${helm.repo.password.artifactory}</password>
+                        <forceUpdate>false</forceUpdate>
+                    </uploadRepoStable>
+                    <uploadRepoSnapshot>
+                        <name>${helm.repo.name}</name>
+                        <url>${helm.repo.url.local}</url>
+                        <type>${helm.repo.type.local}</type>
+                        <forceUpdate>true</forceUpdate>
+                    </uploadRepoSnapshot>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
